@@ -1,0 +1,106 @@
+﻿<Window x:Class="Galois.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Galois"
+        mc:Ignorable="d"
+        Title="Галуа шифратор" MinHeight="700" MinWidth="800" WindowStartupLocation="CenterScreen" Width="800" Height="700" Name="window">
+    <Window.DataContext>
+        <local:GaloisAlgoritm/>
+    </Window.DataContext>
+    <Grid>
+        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <WrapPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,5">
+                <Label Content="Алгоритм: "/>
+                <ComboBox SelectedIndex="{Binding AlgorithmIndex}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="200" Height="25">
+                    <ComboBoxItem Content="SCG-64.1.1" IsSelected="True"/>
+                    <ComboBoxItem Content="SCG-64.1.2"/>
+                    <ComboBoxItem Content="SCG-64.1.4"/>
+                </ComboBox>
+            </WrapPanel>
+            <GroupBox Header="Файли:" Margin="10,10,10,5">
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Label Content="Вхідний файл:" Margin="10,0,10,0"/>
+                    <Grid Margin="5,0,5,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding InputFile}" Name="originalPath" Grid.Column="0" Height="25"/>
+                        <Button Command="{Binding OpenInputFile}" IsEnabled="{Binding Buttons}" Grid.Column="1" Width="50" Height="25" Margin="5,0,0,0" Content="•••"/>
+                        <Button Click="OpenInputGisto" IsEnabled="{Binding Buttons}" Grid.Column="2" Width="90" Height="25" Margin="5,0,0,0" Content="Гістограма"/>
+                    </Grid>
+                    <Label Content="Вихідний файл:" Margin="5,0,10,0"/>
+                    <Grid Margin="5,0,5,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding OutputFile}" Name="chypherPath" Grid.Column="0" Height="25"/>
+                        <Button Command="{Binding OpenOutputFile}" IsEnabled="{Binding Buttons}" Grid.Column="1" Width="50" Height="25" Margin="5,0,0,0" Content="•••"/>
+                        <Button Click="OpenOutputGisto" IsEnabled="{Binding Buttons}" Grid.Column="2" Width="90" Height="25" Margin="5,0,0,0" Content="Гістограма"/>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Параметри:" Margin="10,5,10,5">
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
+                    <Label Content="Поліноми:"/>
+                    <ListBox SelectedIndex="{Binding CurrentPolynom}" ItemsSource="{Binding Polynoms}" Name="polynomialsList" Height="70"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Margin="0,5,5,0">
+                            <Label Content="Утворюючий елемент:"/>
+                            <TextBox Text="{Binding OEString}" Name="OEField" Height="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"/>
+                            <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                                <Button Command="{Binding StartUploadOE}" IsEnabled="{Binding Buttons}" Content="Відкрити файл" Width="115" Height="25" Margin="0,5,5,0"/>
+                                <Button Command="{Binding StartGenerateOE}" IsEnabled="{Binding Buttons}" Name="OEButton" Content="Згенерувати УЕ" Width="120" Height="25" Margin="0,5,0,0"/>
+                            </WrapPanel>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Margin="5,5,0,0">
+                            <Label Content="Вектор ініціалізації:"/>
+                            <TextBox Text="{Binding VIString}" Name="IVField" Height="50" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="Wrap"/>
+                            <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                                <Button Command="{Binding StartUploadVI}" IsEnabled="{Binding Buttons}" Content="Відкрити файл" Width="115" Height="25" Margin="0,5,5,0"/>
+                                <Button Command="{Binding StartGenerateVI}" IsEnabled="{Binding Buttons}" Name="IVButton" Content="Згенерувати ВІ" Width="120" Height="25" Margin="0,5,0,0"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="Режим роботи:" Grid.Column="0" Margin="10,5,5,5">
+                    <WrapPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                        <RadioButton Checked="SetEncryptionMode" IsChecked="{Binding EncryptMode}" Name="encryptMode" Content="Шифрування" GroupName="mode" Margin="0,10,0,0"/>
+                        <RadioButton Checked="SetDecryptionMode" IsChecked="{Binding DecryptMode}" Name="decryptMode" Content="Розшифрування" GroupName="mode" Margin="20,10,0,5"/>
+                    </WrapPanel>
+                </GroupBox>
+                <GroupBox Header="Дії" Grid.Column="1" Margin="5,5,10,5">
+                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button Command="{Binding StartGaloisAlgorithm}" IsEnabled="{Binding Buttons}" Name="startEncryption" Content="Зашифрувати" Margin="5" Width="110" Height="25"/>
+                        <Button Command="{Binding StartGaloisAlgorithm}" IsEnabled="{Binding Buttons}" Name="startDecryption" Content="Розшифрувати" Margin="5" Width="110" Height="25" Visibility="Collapsed"/>
+                        <Button Command="{Binding StartRefresh}" IsEnabled="{Binding Buttons}" Name="refresh" Content="Скинути" Margin="5" Width="70" Height="25"/>
+                    </WrapPanel>
+                </GroupBox>
+            </Grid>
+            <GroupBox Header="Прогрес:" Margin="10,5,10,10">
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <ProgressBar Name="progress" Height="25" Value="{Binding Progress}" Maximum="{Binding MaxProgress}"/>
+                    <WrapPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Label Content="Вирати машинного часу: "/>
+                        <Label Name="timeLabel" Content="{Binding Time}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Window>

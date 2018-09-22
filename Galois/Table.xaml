@@ -1,0 +1,48 @@
+﻿<Window x:Class="Galois.Table"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Galois"
+        mc:Ignorable="d"
+        Title="Table" Height="750" Width="600"
+        Name="window">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="0,0,0,10">
+            <Label Content="Кількість стовпців:" FontWeight="Bold"/>
+            <ComboBox Name="Cols" SelectionChanged="ChangeColsCount" Width="70" Height="20" FontSize="12" FontFamily="Arial">
+                <ComboBoxItem Content="8" Uid="8" Height="25" IsSelected="True"/>
+                <ComboBoxItem Content="10" Uid="10" Height="25"/>
+                <ComboBoxItem Content="16" Uid="16" Height="25"/>
+            </ComboBox>
+            <Menu VerticalAlignment="Center" Margin="5,0,5,0">
+                <MenuItem Header="Зберегти ...">
+                    <MenuItem Click="Export_Buffer" Header="Зберегти у буфер" />
+                    <MenuItem Click="Export_File" Header="Зберегти у файл" />
+                </MenuItem>
+            </Menu>
+            <Label Content="Ентропія:" FontWeight="Bold"/>
+            <Label MouseDoubleClick="Copy" Name="enthropy"/>
+        </DockPanel>
+        <DataGrid Name="gistoTable" AutoGeneratingColumn="DataGrid_LoadingColumn" CanUserAddRows="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" IsReadOnly="True" AutoGenerateColumns="True" LoadingRow="DataGrid_LoadingRow" ColumnWidth="*" RowHeaderWidth="50" ColumnHeaderHeight="25" RowHeight="20" FontSize="12" Grid.Row="1">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="FontFamily" Value="Arial"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="FontFamily" Value="Arial"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+        </DataGrid>
+    </Grid>
+</Window>
